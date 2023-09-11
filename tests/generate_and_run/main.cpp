@@ -13,7 +13,15 @@ using signature = const std::vector<uint8_t>& (*)(const std::string&);
 int main(int argc, char** argv)
 {
     std::string projectPath = argv[1];
-    std::string buildPath = std::string(argv[2]) + "/default.so";
+#ifdef WINDOWS
+    projectPath += ".exe";
+#endif
+    std::string buildPath = argv[2];
+#ifdef LINUX
+    buildPath += "/default.so";
+#elif WINDOWS
+    buildPath += "/default.dll";
+#endif 
     std::string compiler = [argv]()
         {
             std::string result = argv[3];
@@ -39,9 +47,9 @@ int main(int argc, char** argv)
             if (handle)
             {
 #ifdef LINUX
-            signature ptr = reinterpret_cast<signature>(dlsym(handle, "getResource"));
+                signature ptr = reinterpret_cast<signature>(dlsym(handle, "getResource"));
 #elif WINDOWS
-            signature ptr = reinterpret_cast<signature>(GetProcAddress(handle, "getResource"));
+                signature ptr = reinterpret_cast<signature>(GetProcAddress(handle, "getResource"));
 #endif
                 if (ptr)
                 {
