@@ -2,7 +2,16 @@ cmake_minimum_required(VERSION 3.10.0)
 
 project(resource_builder)
 
-set(CMAKE_CXX_FLAGS -std=c++11)
+if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    set(COMPILER_NAME Clang)
+    set(CMAKE_CXX_FLAGS -std=c++11)
+elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    set(COMPILER_NAME G++)
+    set(CMAKE_CXX_FLAGS -std=c++11)
+elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    set(COMPILER_NAME Cl)
+    set(CMAKE_CXX_FLAGS /EHsc)
+endif()
 
 include(CTest)
 
@@ -30,13 +39,5 @@ endif()
 file(COPY ${CMAKE_SOURCE_DIR}/data/ DESTINATION ${CMAKE_BINARY_DIR})
 
 add_subdirectory(tests)
-
-if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    set(COMPILER_NAME Clang)
-elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    set(COMPILER_NAME G++)
-elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    set(COMPILER_NAME Cl)
-endif()
 
 add_test(NAME GenerateAndRun${COMPILER_NAME} COMMAND generate_and_run ${CMAKE_BINARY_DIR}/${PROJECT_NAME} ${CMAKE_BINARY_DIR} ${COMPILER_NAME})
