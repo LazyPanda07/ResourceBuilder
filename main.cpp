@@ -155,11 +155,17 @@ int main(int argc, char** argv)
             command.append(extension);
         }
 
-        std::system(command.data());
+        if (std::system(command.data()))
+        {
+            throw std::runtime_error("Can't execute command: " + command);
+        }
 
         if (!keep)
         {
-            system("rm tem.cpp");
+            if (system("rm tem.cpp"))
+            {
+                throw std::runtime_error("Can't remove tem.cpp");
+            }
         }
 
         std::cout << "Output resources path: " << outputPath << std::endl;

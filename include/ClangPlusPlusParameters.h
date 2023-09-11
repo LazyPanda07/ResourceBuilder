@@ -4,10 +4,10 @@
 
 namespace resource_builder
 {
-    class ClangParameters : public BaseCompilerParameters
+    class ClangPlusPlusParameters : public BaseCompilerParameters
     {
     public:
-        ClangParameters() = default;
+        ClangPlusPlusParameters() = default;
 
         std::string getParameters() const override;
 
@@ -17,6 +17,6 @@ namespace resource_builder
 
         std::string getOutputParameter() const override;
 
-        ~ClangParameters() = default;
+        ~ClangPlusPlusParameters() = default;
     };
 }

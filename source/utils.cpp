@@ -12,7 +12,7 @@
 #endif
 
 #include "GPlusPlusParameters.h"
-#include "ClangParameters.h"
+#include "ClangPlusPlusParameters.h"
 #include "CLCompilerParameters.h"
 
 namespace resource_builder
@@ -53,16 +53,20 @@ namespace resource_builder
 #ifdef LINUX
             char path[PATH_MAX]{};
 
-            getcwd(path, sizeof(path));
-
-            result = path;
+            if (!getcwd(path, sizeof(path)))
+            {
+                throw std::runtime_error("Can't get current directory path");
+            }
 #elif WINDOWS
             char path[MAX_PATH]{};
 
-            GetCurrentDirectory(sizeof(path), path);
+            if (GetCurrentDirectory(sizeof(path), path))
+            {
+                throw std::runtime_error("Can't get current directory path");
+            }
+#endif
 
             result = path;
-#endif
 
             result.shrink_to_fit();
 
@@ -77,9 +81,9 @@ namespace resource_builder
             {
                 return std::unique_ptr<BaseCompilerParameters>(new GPlusPlusParameters());
             }
-            else if (compilerName == "clang")
+            else if (compilerName == "clang" || compilerName == "clang++")
             {
-                return std::unique_ptr<BaseCompilerParameters>(new ClangParameters());
+                return std::unique_ptr<BaseCompilerParameters>(new ClangPlusPlusParameters());
             }
             else if (compilerName == "cl" || compilerName == "msvc")
             {
