@@ -38,6 +38,8 @@ int main(int argc, char** argv)
 
         std::cout << "Executed command: " << command << std::endl;
 
+        system("where cl.exe");
+
         if (system(command.data()))
         {
             return 1;
