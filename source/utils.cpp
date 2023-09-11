@@ -61,7 +61,7 @@ namespace resource_builder
 #elif WINDOWS
             char path[MAX_PATH]{};
 
-            if (GetCurrentDirectoryA(sizeof(path), path))
+            if (!GetCurrentDirectoryA(sizeof(path), path))
             {
                 throw std::runtime_error("Can't get current directory path");
             }
