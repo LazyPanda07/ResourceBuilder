@@ -3,6 +3,7 @@
 #include <sstream>
 #include <iomanip>
 #include <algorithm>
+#include <iostream>
 
 #ifdef LINUX
 #include <unistd.h>
@@ -83,22 +84,24 @@ namespace resource_builder
 
             std::for_each(compilerName.begin(), compilerName.end(), [](char& c) { c = tolower(c); });
 
+            if (contains(compilerName, "clang") || contains(compilerName, "clang++"))
+            {
+                return std::unique_ptr<BaseCompilerParameters>(new ClangPlusPlusParameters());
+            }
+
             if (contains(compilerName, "g++") || contains(compilerName, "gcc"))
             {
                 return std::unique_ptr<BaseCompilerParameters>(new GPlusPlusParameters());
             }
-            else if (contains(compilerName, "clang") || contains(compilerName, "clang++"))
-            {
-                return std::unique_ptr<BaseCompilerParameters>(new ClangPlusPlusParameters());
-            }
-            else if (contains(compilerName, "cl") || contains(compilerName, "msvc"))
+
+            if (contains(compilerName, "cl") || contains(compilerName, "msvc"))
             {
                 return std::unique_ptr<BaseCompilerParameters>(new CLCompilerParameters());
             }
-            else
-            {
-                throw std::runtime_error("Wrong compiler name");
-            }
+
+            std::cout << compilerName << std::endl;
+
+            throw std::runtime_error("Wrong compiler name");
         }
     }
 }
