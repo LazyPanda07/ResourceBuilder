@@ -108,12 +108,6 @@ int main(int argc, char** argv)
 
         resultFile << std::endl << "};" << std::endl << std::endl;
 
-#ifdef _WIN32
-#define EXPORT_C_API 
-#else
-#define EXPORT_C_API 
-#endif
-
 #ifdef LINUX
         getterSignature += "__attribute__ ((visibility (\"default\")))";
 #elif WINDOWS   

@@ -76,17 +76,22 @@ namespace resource_builder
 
         std::unique_ptr<BaseCompilerParameters> createParameters(std::string compilerName)
         {
+            auto contains = [](const std::string& source, const std::string& substring)
+                {
+                    return source.find(substring) != std::string::npos;
+                };
+
             std::for_each(compilerName.begin(), compilerName.end(), [](char& c) { c = tolower(c); });
 
-            if (compilerName == "g++" || compilerName == "gcc")
+            if (contains(compilerName, "g++") || contains(compilerName, "gcc"))
             {
                 return std::unique_ptr<BaseCompilerParameters>(new GPlusPlusParameters());
             }
-            else if (compilerName == "clang" || compilerName == "clang++")
+            else if (contains(compilerName, "clang") || contains(compilerName, "clang++"))
             {
                 return std::unique_ptr<BaseCompilerParameters>(new ClangPlusPlusParameters());
             }
-            else if (compilerName == "cl" || compilerName == "msvc")
+            else if (contains(compilerName, "cl") || contains(compilerName, "msvc"))
             {
                 return std::unique_ptr<BaseCompilerParameters>(new CLCompilerParameters());
             }
