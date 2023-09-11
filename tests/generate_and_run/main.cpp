@@ -2,7 +2,11 @@
 #include <vector>
 #include <algorithm>
 
+#ifdef LINUX
 #include <dlfcn.h>
+#elif WINDOWS
+#include <Windows.h>
+#endif
 
 using signature = const std::vector<uint8_t>& (*)(const std::string&);
 
@@ -10,45 +14,55 @@ int main(int argc, char** argv)
 {
     std::string projectPath = argv[1];
     std::string buildPath = std::string(argv[2]) + "/default.so";
-    std::string compiler = [argv]() 
-    {
-        std::string result = argv[3];
-        
-        std::for_each(result.begin(), result.end(), [](char& c) { c = tolower(c); }); 
-
-        return result; 
-    }();
-    std::string command = projectPath + ' ' + compiler + " default --keep default.jpg";
-
-    if (system(command.data()))
-    {
-        return 1;
-    }
-
-    try
-    {
-        if (void* handle = dlopen(buildPath.data(), RTLD_LAZY))
+    std::string compiler = [argv]()
         {
-            if (signature ptr = reinterpret_cast<signature>(dlsym(handle, "getResource")))
+            std::string result = argv[3];
+
+            std::for_each(result.begin(), result.end(), [](char& c) { c = tolower(c); });
+
+            return result;
+        }();
+        std::string command = projectPath + ' ' + compiler + " default --keep default.jpg";
+
+        if (system(command.data()))
+        {
+            return 1;
+        }
+
+        try
+        {
+#ifdef LINUX
+            void* handle = dlopen(buildPath.data(), RTLD_LAZY);
+#elif WINDOWS
+            HMODULE handle = LoadLibraryA(buildPath.data());
+#endif
+            if (handle)
             {
-                return ptr("default.jpg").empty();
+#ifdef LINUX
+            signature ptr = reinterpret_cast<signature>(dlsym(handle, "getResource"));
+#elif WINDOWS
+            signature ptr = reinterpret_cast<signature>(GetProcAddress(handle, "getResource"));
+#endif
+                if (ptr)
+                {
+                    return ptr("default.jpg").empty();
+                }
+                else
+                {
+                    return 3;
+                }
             }
             else
             {
-                return 3;
+                return 2;
             }
         }
-        else
+        catch (const std::exception& e)
         {
-            return 2;
+            std::cerr << e.what() << std::endl;
+
+            return 4;
         }
-    }
-    catch (const std::exception& e)
-    {
-        std::cerr << e.what() << std::endl;
 
-        return -4;
-    }
-
-    return 0;
+        return 0;
 }
