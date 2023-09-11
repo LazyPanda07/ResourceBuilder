@@ -9,6 +9,7 @@
 #include <limits.h>
 #elif WINDOWS
 #include <Windows.h>
+#include <minwindef.h>
 #endif
 
 #include "GPlusPlusParameters.h"
