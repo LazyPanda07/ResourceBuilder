@@ -32,6 +32,10 @@ int main(int argc, char** argv)
         }();
         std::string command = projectPath + ' ' + compiler + " default --keep default.jpg";
 
+#ifdef WINDOWS
+        command.insert(command.find("/resource_builder"), "Release");
+#endif
+
         if (system(command.data()))
         {
             return 1;
