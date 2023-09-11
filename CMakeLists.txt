@@ -13,6 +13,9 @@ elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     set(CMAKE_CXX_FLAGS /EHsc)
 endif()
 
+# set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}/Debug)
+# set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/Release)
+
 include(CTest)
 
 set(SOURCES main.cpp)
@@ -42,4 +45,4 @@ add_subdirectory(tests)
 
 add_test(NAME GenerateAndRun${COMPILER_NAME} COMMAND generate_and_run ${CMAKE_BINARY_DIR}/${PROJECT_NAME} ${CMAKE_BINARY_DIR} ${COMPILER_NAME})
 
-message(${CMAKE_BINARY_DIR})
+message("Release output: " ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE})
