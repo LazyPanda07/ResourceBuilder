@@ -57,7 +57,11 @@ namespace resource_builder
 
             result = path;
 #elif WINDOWS
+            char path[MAX_PATH]{};
 
+            GetCurrentDirectory(sizeof(path), path);
+
+            result = path;
 #endif
 
             result.shrink_to_fit();
