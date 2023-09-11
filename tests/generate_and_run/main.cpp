@@ -36,6 +36,8 @@ int main(int argc, char** argv)
         command.insert(command.find("/resource_builder"), "Release");
 #endif
 
+        std::cout << "Executed command: " << command << std::endl;
+
         if (system(command.data()))
         {
             return 1;
