@@ -145,10 +145,6 @@ int main(int argc, char** argv)
 
         command.append(outputPath);
 
-#ifdef WINDOWS
-        command += '\"';
-#endif
-
 #ifdef LINUX
         extension = ".so";
 #elif WINDOWS
@@ -162,7 +158,11 @@ int main(int argc, char** argv)
             command.append(extension);
         }
 
-        if (std::system(command.data()))
+#ifdef WINDOWS
+        command += '\"';
+#endif
+
+        if (system(command.data()))
         {
             throw std::runtime_error("Can't execute command: " + command);
         }
