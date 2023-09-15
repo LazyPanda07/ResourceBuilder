@@ -9,7 +9,7 @@ namespace resource_builder
 
     std::string CLCompilerParameters::getOutputParameter() const
     {
-        return "/link /out:";
+        return "/link /IMPLIB:default.lib /OUT:";
     }
 
     std::string CLCompilerParameters::getStandard() const

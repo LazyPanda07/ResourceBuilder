@@ -168,7 +168,15 @@ int main(int argc, char** argv)
 
         if (!keep)
         {
-            if (system("rm tem.cpp"))
+            std::string deleteTemFileCommand;
+
+#ifdef LINUX
+            deleteTemFileCommand = "rm tem.cpp";
+#elif WINDOWS
+            deleteTemFileCommand = "del tem.cpp";
+#endif
+
+            if (deleteTemFileCommand.data())
             {
                 throw std::runtime_error("Can't remove tem.cpp");
             }
