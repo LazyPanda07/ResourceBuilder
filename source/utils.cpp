@@ -99,8 +99,6 @@ namespace resource_builder
                 return std::unique_ptr<BaseCompilerParameters>(new CLCompilerParameters());
             }
 
-            std::cout << compilerName << std::endl;
-
             throw std::runtime_error("Wrong compiler name");
         }
     }

@@ -30,7 +30,8 @@ int main(int argc, char** argv)
 
             return result;
         }();
-        std::string command = projectPath + ' ' + compiler + " default --keep default.jpg";
+        
+        std::string command = '\"' + projectPath + "\" " + '\"' + compiler + '\"' + " default --keep default.jpg";
 
 #ifdef WINDOWS
         command.insert(command.find("/resource_builder"), "/Release");
