@@ -127,6 +127,7 @@ int main(int argc, char** argv)
 })" << std::endl;
 
         std::ofstream("tem.cpp") << resultFile.str();
+        std::cout << resultFile.str() << std::endl;
 
         std::string extension;
         std::string command = '\"' + compilerName + "\" " +
