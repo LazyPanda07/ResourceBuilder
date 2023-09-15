@@ -143,7 +143,7 @@ int main(int argc, char** argv)
 #elif WINDOWS
         extension = ".dll";
         
-        command.insert(0, "call C:\\Program Files\\Microsoft Visual Studio\\2022\\Enterprise\\VC\\Auxiliary\\Build\\vcvars64.bat && ");
+        command.insert(0, "call \"C:\\Program Files\\Microsoft Visual Studio\\2022\\Enterprise\\VC\\Auxiliary\\Build\\vcvars64.bat\" && ");
 #endif
 
         if (outputPath.find(extension) == std::string::npos)
