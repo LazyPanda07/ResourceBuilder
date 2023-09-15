@@ -26,6 +26,8 @@ int main(int argc, char** argv)
     std::string command = '\"' + projectPath + "\" " + '\"' + compiler + '\"' + " default --keep default.jpg";
 
 #ifdef WINDOWS
+    command.insert(command.begin(), "start ");
+
     command.insert(command.find("/resource_builder"), "/Release");
 #endif
 

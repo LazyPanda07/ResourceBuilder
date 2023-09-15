@@ -6,18 +6,11 @@
 
 #include "utils.h"
 
-#define DEBUG_LOG(expr) \
-    std::cout << "before" << std::endl; \
-    expr; \
-    std::cout << "after" << std::endl;
-
 /**
  * @param argv Compiler<cl, g++, clang>, output path, <--keep, --ignore_resource_error> || resource paths
  */
 int main(int argc, char** argv)
 {
-    std::cout << "Start" << std::endl;
-
     try
     {
         std::cout << "Usage: compiler<cl, g++, clang>, output path, <--keep, --ignore_resource_error> || resource paths" << std::endl <<
