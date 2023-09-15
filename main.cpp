@@ -129,7 +129,7 @@ int main(int argc, char** argv)
         std::ofstream("tem.cpp") << resultFile.str();
 
         std::string extension;
-        std::string command = compilerName + ' ' +
+        std::string command = '\"' + compilerName + "\" " +
             parameters->getStandard() + ' ' +
             parameters->getParameters() + ' ' +
             parameters->getOptimizationLevel() + ' ' +
