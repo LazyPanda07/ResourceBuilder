@@ -22,62 +22,54 @@ int main(int argc, char** argv)
 #elif WINDOWS
     buildPath += "/default.dll";
 #endif 
-    std::string compiler = [argv]()
-        {
-            std::string result = argv[3];
-
-            std::for_each(result.begin(), result.end(), [](char& c) { c = tolower(c); });
-
-            return result;
-        }();
-        
-        std::string command = '\"' + projectPath + "\" " + '\"' + compiler + '\"' + " default --keep default.jpg";
+    std::string compiler = argv[3];
+    std::string command = '\"' + projectPath + "\" " + '\"' + compiler + '\"' + " default --keep default.jpg";
 
 #ifdef WINDOWS
-        command.insert(command.find("/resource_builder"), "/Release");
+    command.insert(command.find("/resource_builder"), "/Release");
 #endif
 
-        std::cout << "Executed command: " << command << std::endl;
+    std::cout << "Executed command: " << command << std::endl;
 
-        if (system(command.data()))
-        {
-            return 1;
-        }
+    if (system(command.data()))
+    {
+        return 1;
+    }
 
-        try
+    try
+    {
+#ifdef LINUX
+        void* handle = dlopen(buildPath.data(), RTLD_LAZY);
+#elif WINDOWS
+        HMODULE handle = LoadLibraryA(buildPath.data());
+#endif
+        if (handle)
         {
 #ifdef LINUX
-            void* handle = dlopen(buildPath.data(), RTLD_LAZY);
+            signature ptr = reinterpret_cast<signature>(dlsym(handle, "getResource"));
 #elif WINDOWS
-            HMODULE handle = LoadLibraryA(buildPath.data());
+            signature ptr = reinterpret_cast<signature>(GetProcAddress(handle, "getResource"));
 #endif
-            if (handle)
+            if (ptr)
             {
-#ifdef LINUX
-                signature ptr = reinterpret_cast<signature>(dlsym(handle, "getResource"));
-#elif WINDOWS
-                signature ptr = reinterpret_cast<signature>(GetProcAddress(handle, "getResource"));
-#endif
-                if (ptr)
-                {
-                    return ptr("default.jpg").empty();
-                }
-                else
-                {
-                    return 3;
-                }
+                return ptr("default.jpg").empty();
             }
             else
             {
-                return 2;
+                return 3;
             }
         }
-        catch (const std::exception& e)
+        else
         {
-            std::cerr << e.what() << std::endl;
-
-            return 4;
+            return 2;
         }
+    }
+    catch (const std::exception& e)
+    {
+        std::cerr << e.what() << std::endl;
 
-        return 0;
+        return 4;
+    }
+
+    return 0;
 }

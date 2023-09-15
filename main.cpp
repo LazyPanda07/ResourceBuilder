@@ -149,6 +149,8 @@ int main(int argc, char** argv)
             command.append(extension);
         }
 
+        std::cout << "Generate command: " << command << std::endl;
+
         if (std::system(command.data()))
         {
             throw std::runtime_error("Can't execute command: " + command);
