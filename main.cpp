@@ -126,7 +126,11 @@ int main(int argc, char** argv)
 	return it->second;
 })" << std::endl;
 
+        std::cout << "before tem.cpp" << std::endl;
+
         std::ofstream("tem.cpp") << resultFile.str();
+
+        std::cout << "after tem.cpp" << std::endl;
 
         std::string extension;
         std::string command = compilerName + ' ' +
@@ -148,8 +152,6 @@ int main(int argc, char** argv)
         {
             command.append(extension);
         }
-
-        std::cout << "Generate command: " << command << std::endl;
 
         if (std::system(command.data()))
         {
