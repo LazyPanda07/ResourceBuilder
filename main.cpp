@@ -142,7 +142,7 @@ int main(int argc, char** argv)
         extension = ".so";
 #elif WINDOWS
         extension = ".dll";
-        system("dir C:\\*\\vcvars64.bat /w/o/s/p");
+        system("dir C:\\vcvars64.bat /s");
 #endif
 
         if (outputPath.find(extension) == std::string::npos)
