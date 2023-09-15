@@ -40,4 +40,4 @@ file(COPY ${CMAKE_SOURCE_DIR}/data/ DESTINATION ${CMAKE_BINARY_DIR})
 
 add_subdirectory(tests)
 
-add_test(NAME GenerateAndRun${COMPILER_NAME} COMMAND generate_and_run ${CMAKE_BINARY_DIR}/${PROJECT_NAME} ${CMAKE_BINARY_DIR} ${CMAKE_CXX_COMPILER})
+add_test(NAME GenerateAndRun${COMPILER_NAME} COMMAND generate_and_run "${CMAKE_BINARY_DIR}/${PROJECT_NAME}" "${CMAKE_BINARY_DIR}" "${CMAKE_CXX_COMPILER}")
