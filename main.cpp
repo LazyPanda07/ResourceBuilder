@@ -134,7 +134,11 @@ int main(int argc, char** argv)
             parameters->getParameters() + ' ' +
             parameters->getOptimizationLevel() + ' ' +
             "tem.cpp" + ' ' +
-            parameters->getOutputParameter() + ' ';
+            parameters->getOutputParameter() 
+            #ifdef LINUX 
+                + ' '
+            #endif
+            ;
 
         command.append(outputPath);
 
