@@ -54,11 +54,11 @@ int main(int argc, char** argv)
 #endif
             if (ptr)
             {
-                return ptr("default.jpg").empty();
+                return ptr("default.jpg").empty() ? 3 : 0;
             }
             else
             {
-                return 3;
+                return 4;
             }
         }
         else
@@ -70,7 +70,7 @@ int main(int argc, char** argv)
     {
         std::cerr << e.what() << std::endl;
 
-        return 4;
+        return 5;
     }
 
     return 0;

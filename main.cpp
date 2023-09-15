@@ -134,19 +134,25 @@ int main(int argc, char** argv)
             parameters->getParameters() + ' ' +
             parameters->getOptimizationLevel() + ' ' +
             "tem.cpp" + ' ' +
-            parameters->getOutputParameter() 
-            #ifdef LINUX 
-                + ' '
-            #endif
+            parameters->getOutputParameter() +
+#ifdef LINUX 
+            ' '
+#elif WINDOWS
+            '\"'
+#endif
             ;
 
         command.append(outputPath);
+
+#ifdef WINDOWS
+        command += '\"';
+#endif
 
 #ifdef LINUX
         extension = ".so";
 #elif WINDOWS
         extension = ".dll";
-        
+
         command.insert(0, "call \"C:\\Program Files\\Microsoft Visual Studio\\2022\\Enterprise\\VC\\Auxiliary\\Build\\vcvars64.bat\" && ");
 #endif
 
