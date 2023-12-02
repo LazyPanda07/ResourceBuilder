@@ -13,10 +13,6 @@
 #include <minwindef.h>
 #endif
 
-#include "GPlusPlusParameters.h"
-#include "ClangPlusPlusParameters.h"
-#include "CLCompilerParameters.h"
-
 namespace resource_builder
 {
     namespace utils
@@ -73,33 +69,6 @@ namespace resource_builder
             result.shrink_to_fit();
 
             return result;
-        }
-
-        std::unique_ptr<BaseCompilerParameters> createParameters(std::string compilerName)
-        {
-            auto contains = [](const std::string& source, const std::string& substring)
-                {
-                    return source.find(substring) != std::string::npos;
-                };
-
-            std::for_each(compilerName.begin(), compilerName.end(), [](char& c) { c = tolower(c); });
-
-            if (contains(compilerName, "clang") || contains(compilerName, "clang++"))
-            {
-                return std::unique_ptr<BaseCompilerParameters>(new ClangPlusPlusParameters());
-            }
-
-            if (contains(compilerName, "g++") || contains(compilerName, "gcc"))
-            {
-                return std::unique_ptr<BaseCompilerParameters>(new GPlusPlusParameters());
-            }
-
-            if (contains(compilerName, "cl") || contains(compilerName, "msvc"))
-            {
-                return std::unique_ptr<BaseCompilerParameters>(new CLCompilerParameters());
-            }
-
-            throw std::runtime_error("Wrong compiler name");
         }
     }
 }

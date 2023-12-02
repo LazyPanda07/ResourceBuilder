@@ -1,3 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
 
-add_subdirectory(generate_and_run)
+project(resource_builder_tests)
+
+add_executable(${PROJECT_NAME} main.cpp)

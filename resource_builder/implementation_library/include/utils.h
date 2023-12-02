@@ -1,8 +1,6 @@
 #pragma once
 
-#include <memory>
-
-#include "BaseCompilerParameters.h"
+#include <string>
 
 namespace resource_builder
 {
@@ -15,7 +13,5 @@ namespace resource_builder
         char getSeparator();
 
         std::string getCurrentFolder();
-
-        std::unique_ptr<BaseCompilerParameters> createParameters(std::string compilerName);
     }
 }
