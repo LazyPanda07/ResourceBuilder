@@ -12,7 +12,9 @@ endif()
 
 add_executable(${PROJECT_NAME} main.cpp)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE resource_builder_implementation_library)
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/resource_builder/core/include)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE resource_builder_core)
 
 if (WIN32)
     add_definitions(-DWINDOWS)

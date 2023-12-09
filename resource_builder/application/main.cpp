@@ -1,7 +1,7 @@
 #include <iostream>
 
-#include "../implementation_library/include/utils.h"
-#include "../implementation_library/include/ResourceFileGenerator.h"
+#include "utils.h"
+#include "ResourceFileGenerator.h"
 
 /**
  * @param argv <cl, gcc|g++, clang>, output path, <--keep, --ignore_resource_error> || resource paths
