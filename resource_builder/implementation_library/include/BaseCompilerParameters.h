@@ -11,9 +11,11 @@ namespace resource_builder
 
         virtual std::string getParameters() const = 0;
 
-        virtual std::string getOutputParameter() const = 0;
+        virtual std::string getOutputParameter(const std::string& outputPath) const = 0;
 
         virtual std::string getStandard() const = 0;
+
+        virtual std::string getName() const = 0;
 
         virtual std::string getOptimizationLevel() const;
 

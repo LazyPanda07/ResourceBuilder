@@ -13,6 +13,11 @@
 #include <minwindef.h>
 #endif
 
+#include "GPlusPlusParameters.h"
+#include "ClangPlusPlusParameters.h"
+#include "CLCompilerParameters.h"
+#include "ResourceFileGenerator.h"
+
 namespace resource_builder
 {
     namespace utils
@@ -41,7 +46,7 @@ namespace resource_builder
             return '/';
 #elif WINDOWS
             return '\\';
-#endif  
+#endif
         }
 
         std::string getCurrentFolder()
@@ -69,6 +74,43 @@ namespace resource_builder
             result.shrink_to_fit();
 
             return result;
+        }
+
+        std::unique_ptr<resource_builder::BaseCompilerParameters> createParameters(std::string compilerName)
+        {
+            auto contains = [](const std::string& source, const std::string& substring)
+                {
+                    return source.find(substring) != std::string::npos;
+                };
+
+            std::for_each(compilerName.begin(), compilerName.end(), [](char& c) { c = tolower(c); });
+
+            if (contains(compilerName, "clang") || contains(compilerName, "clang++"))
+            {
+                return std::unique_ptr<resource_builder::BaseCompilerParameters>(new resource_builder::ClangPlusPlusParameters());
+            }
+
+            if (contains(compilerName, "gcc") || contains(compilerName, "g++"))
+            {
+                return std::unique_ptr<resource_builder::BaseCompilerParameters>(new resource_builder::GPlusPlusParameters());
+            }
+
+            if (contains(compilerName, "cl") || contains(compilerName, "msvc"))
+            {
+                return std::unique_ptr<resource_builder::BaseCompilerParameters>(new resource_builder::CLCompilerParameters());
+            }
+
+            throw std::runtime_error("Wrong compiler name");
+        }
+
+        std::string createResourceCommand(const std::unique_ptr<resource_builder::BaseCompilerParameters>& parameters, const std::string& outputPath)
+        {
+            return '\"' + parameters->getName() + '\"' + ' ' +
+                parameters->getStandard() + ' ' +
+                parameters->getParameters() + ' ' +
+                parameters->getOptimizationLevel() + ' ' +
+                resource_builder::ResourceFileGenerator::resourceFileName + ' ' +
+                parameters->getOutputParameter(outputPath);
         }
     }
 }

@@ -15,7 +15,9 @@ namespace resource_builder
 
         std::string getStandard() const override;
 
-        std::string getOutputParameter() const override;
+        std::string getName() const override;
+
+        std::string getOutputParameter(const std::string& outputPath) const override;
 
         ~ClangPlusPlusParameters() = default;
     };

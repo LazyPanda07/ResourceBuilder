@@ -2,6 +2,4 @@
 
 set -e
 
-rm default.so
-rm tem.cpp
-./resource_builder g++ default --keep default.jpg
+./resource_builder g++ default.so --keep default.jpg

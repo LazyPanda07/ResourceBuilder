@@ -9,9 +9,11 @@ namespace resource_builder
     public:
         virtual std::string getParameters() const override;
 
-        virtual std::string getOutputParameter() const override;
+        virtual std::string getOutputParameter(const std::string& outputPath) const override;
 
         virtual std::string getStandard() const override;
+
+        std::string getName() const override;
 
         virtual std::string getOptimizationLevel() const override;
     };
