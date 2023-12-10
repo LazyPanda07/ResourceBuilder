@@ -125,6 +125,5 @@ jobs:
       uses: svenstaro/upload-release-action@master
       with:
         tag: v${{ env.RESOURCE_BUILDER_VERSION }}
-        file: *_${{ env.RESOURCE_BUILDER_ARCHIVE_NAME }}
-        file_glob: true
+        file: ${{ env.RESOURCE_BUILDER_ARCHIVE_NAME }}
           
