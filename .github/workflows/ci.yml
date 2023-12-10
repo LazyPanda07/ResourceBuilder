@@ -16,8 +16,8 @@ jobs:
     steps:
     - uses: actions/checkout@v3
   
-    - name: Install clang
-      run: apt update && apt install clang
+    - name: Clang version
+      run: clang --version
   
     - name: Build
       run: mkdir build && cd build && cmake -DCMAKE_C_COMPILER=${{ matrix.compiler }} -DCMAKE_CXX_COMPILER=${{ matrix.compiler }} .. && make
@@ -36,7 +36,7 @@ jobs:
       uses: microsoft/setup-msbuild@main
   
     - name: Build
-      run: mkdir build && cd build && cmake ..
+      run: mkdir build && cd build && cmake .. && msbuild /p:Configuration=${{ matrix.configuration }} /p:Platform=x64 ALL_BUILD.vcxproj
     
     - name: Folder
       run: cd build && dir
