@@ -120,14 +120,12 @@ jobs:
       run: echo "RESOURCE_BUILDER_ARCHIVE_NAME=${{ matrix.artifact }}_ResourceBuilder_${{ env.RESOURCE_BUILDER_VERSION }}.zip" >> $Env:GITHUB_ENV
 
     - name: Download artifact
-      # if: ${{ env.CURRENT_BRANCH == 'master' }}
+      if: ${{ env.CURRENT_BRANCH == 'master' }}
       uses: actions/download-artifact@v3
       with:
         name: ${{ matrix.artifact }}
-
-    - name: Folder
-      run: dir
-      
+        path: ${{ matrix.artifact }}
+        
     - name: Create zip
       if: ${{ env.CURRENT_BRANCH == 'master' }}
       run: Compress-Archive -Path @("${{ matrix.artifact }}") -DestinationPath ${{ env.RESOURCE_BUILDER_ARCHIVE_NAME }}
