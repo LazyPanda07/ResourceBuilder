@@ -11,7 +11,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, ubuntu-18.04]
         configuration: [Debug, Release]
-        compiler: [gcc, clang]
+        compiler: [g++, clang++]
 
     steps:
     - uses: actions/checkout@v3
@@ -20,7 +20,7 @@ jobs:
       run: clang --version
   
     - name: Build
-      run: mkdir build && cd build && cmake -DCMAKE_C_COMPILER=${{ matrix.compiler }} -DCMAKE_CXX_COMPILER=${{ matrix.compiler }} .. && make
+      run: mkdir build && cd build && cmake -DCMAKE_CXX_COMPILER=${{ matrix.compiler }} .. && make
 
   windows-build:
     runs-on: windows-latest
@@ -39,4 +39,4 @@ jobs:
       run: mkdir build && cd build && cmake .. && msbuild /p:Configuration=${{ matrix.configuration }} /p:Platform=x64 ALL_BUILD.vcxproj
     
     - name: Folder
-      run: cd build && dir
+      run: cd build && cd x64 && dir
