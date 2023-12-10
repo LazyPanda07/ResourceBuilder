@@ -33,15 +33,6 @@ def get_extension() -> str:
     return ".dll" if os.name == "nt" else ".so"
 
 
-def run_shell_script() -> str:
-    result = args.shell_script_name
-
-    if os.name == "posix":
-        result = "source " + result
-
-    return result
-
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         "test",
@@ -57,7 +48,10 @@ if __name__ == '__main__':
     application_folder_path = args.application_folder_path
     shared_library_name = f"default{get_extension()}"
 
-    error_code = os.system(f"cd {application_folder_path} && {run_shell_script()}")
+    if os.name == "posix":
+        subprocess.call(["bash", args.shell_script_name], cwd=application_folder_path)
+    else:
+        os.system(f"cd {application_folder_path} && {args.shell_script_name}")
 
     os.replace(f"{application_folder_path}/{shared_library_name}", f"{os.curdir}/{shared_library_name}")
 
