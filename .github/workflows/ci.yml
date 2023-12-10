@@ -24,8 +24,7 @@ jobs:
       run: cd tests && python3 test.py --application_folder_path ${{ github.workspace }}/build/make_install --shell_script_name linux_default_build.sh
 
     - name: Upload artifacts
-      # if: ${{ env.CURRENT_BRANCH == 'master' && matrix.compiler == 'g++' }}
-      if: ${{ env.CURRENT_BRANCH == 'dev' && matrix.compiler == 'g++' }}
+      if: ${{ env.CURRENT_BRANCH == 'master' && matrix.compiler == 'g++' }}
       uses: actions/upload-artifact@v3
       with:
         name: linux
@@ -63,13 +62,16 @@ jobs:
           rm *.lib
           rm *.obj
 
-    - name: Remove debug executable
-      # if: ${{ env.CURRENT_BRANCH == 'master' && matrix.configuration == 'Debug' }}
-      if: ${{ env.CURRENT_BRANCH == 'dev' && matrix.configuration == 'Debug' }}
-      run: rm ${{ github.workspace }}\build\make_install\*.exe
+    - name: Remove debug
+      if: ${{ env.CURRENT_BRANCH == 'master' && matrix.configuration == 'Debug' }}
+      run: |
+          cd build && cd make_install
+          rm *.exe
+          rm *.jpg
+          rm *.bat
 
     - name: Upload artifacts
-      # if: ${{ env.CURRENT_BRANCH == 'master' }}
+      if: ${{ env.CURRENT_BRANCH == 'master' }}
       uses: actions/upload-artifact@v3
       with:
         name: Windows_${{ matrix.configuration }}
@@ -115,18 +117,15 @@ jobs:
       run: echo "RESOURCE_BUILDER_ARCHIVE_NAME=ResourceBuilder_${{ env.RESOURCE_BUILDER_VERSION }}.zip" >> $Env:GITHUB_ENV
 
     - name: Download artifacts
-      # if: ${{ env.CURRENT_BRANCH == 'master' }}
+      if: ${{ env.CURRENT_BRANCH == 'master' }}
       uses: actions/download-artifact@v3
       
-    - name: Folder
-      run: ls
-
     - name: Create Windows zip
-      # if: ${{ env.CURRENT_BRANCH == 'master' }}
+      if: ${{ env.CURRENT_BRANCH == 'master' }}
       run: Compress-Archive -Path @("Windows_Debug", "Windows_Release") -DestinationPath Windows_${{ env.RESOURCE_BUILDER_ARCHIVE_NAME }}
 
     - name: Create Linux zip
-      # if: ${{ env.CURRENT_BRANCH == 'master' }}
+      if: ${{ env.CURRENT_BRANCH == 'master' }}
       run: Compress-Archive -Path @("linux") -DestinationPath Linux_${{ env.RESOURCE_BUILDER_ARCHIVE_NAME }}
 
     - name: Publish
