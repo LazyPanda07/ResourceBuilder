@@ -40,5 +40,8 @@ build/
 # Visual Studio
 .vs/
 
+# PyCharm
+.idea/
+
 # Settings
 CMakeSettings.json
