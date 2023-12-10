@@ -22,6 +22,13 @@ namespace resource_builder
 {
     namespace utils
     {
+        std::string getResourceBuilderVersion()
+        {
+            std::string resourceBuilderVersion = "0.1.0";
+
+            return resourceBuilderVersion;
+        }
+
         std::string toHex(uint8_t v)
         {
             std::ostringstream ss;

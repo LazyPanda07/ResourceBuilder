@@ -9,6 +9,8 @@ namespace resource_builder
 {
     namespace utils
     {
+        std::string getResourceBuilderVersion();
+
         std::string toHex(uint8_t v);
 
         std::string getFileName(const std::string& imagePath);

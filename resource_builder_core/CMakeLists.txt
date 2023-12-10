@@ -24,3 +24,6 @@ if (WIN32)
 elseif(UNIX)
     add_definitions(-DLINUX)
 endif()
+
+install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
