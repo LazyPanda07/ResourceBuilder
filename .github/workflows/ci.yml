@@ -18,12 +18,9 @@ jobs:
   
     - name: Build
       run: mkdir build && cd build && cmake -DCMAKE_CXX_COMPILER=${{ matrix.compiler }} .. && make && make install
-
-    - name: Folder
-      run: cd build && ls -a
       
     - name: Tests
-      run: cd tests && python3 test.py --application_folder_path build/make_install --shell_script_name linux_default_build.sh
+      run: cd tests && python3 test.py --application_folder_path ${{ github.workspace }}/build/make_install --shell_script_name linux_default_build.sh
 
     - name: Folder
       run: cd build/make_install && ls -a
@@ -43,12 +40,9 @@ jobs:
   
     - name: Build
       run: mkdir build && cd build && cmake .. && msbuild /p:Configuration=${{ matrix.configuration }} /p:Platform=x64 INSTALL.vcxproj
-
-    - name: Folder
-      run: cd build && dir
-    
+      
     - name: Tests
-      run: cd tests && python test.py --application_folder_path build/make_install --shell_script_name windows_default_build.bat
+      run: cd tests && python test.py --application_folder_path ${{ github.workspace }}/build/make_install --shell_script_name windows_default_build.bat
 
   linux-docker:
     runs-on: ubuntu-latest
@@ -60,8 +54,7 @@ jobs:
     - name: Pull Ubuntu 18.04
       run: sudo docker pull ubuntu:18.04
 
-    - name: Run docker
-      run: docker run --name Ubuntu-18.04 --rm -i ubuntu:18.04 /bin/bash
-
-    - name: Run command in docker
-      run: docker exec -d Ubuntu-18.04 apt update && apt install gcc && gcc --version
+    - name: Docker
+      run: |
+          docker run --name Ubuntu-18.04 --rm -i ubuntu:18.04 /bin/bash &&
+          docker exec -d Ubuntu-18.04 apt update && apt install gcc && gcc --version
