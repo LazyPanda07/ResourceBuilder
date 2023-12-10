@@ -18,9 +18,6 @@ jobs:
     - name: Build
       run: mkdir build && cd build && cmake -DCMAKE_CXX_COMPILER=${{ matrix.compiler }} .. && make && make install
       
-    - name: Change linux_default_build.sh script mode
-      run: chmod +x build/make_install/linux_default_build.sh
-
     - name: Tests
       run: cd tests && python3 test.py --application_folder_path ${{ github.workspace }}/build/make_install --shell_script_name linux_default_build.sh
 
@@ -42,7 +39,7 @@ jobs:
       run: mkdir build && cd build && cmake .. && msbuild /p:Configuration=${{ matrix.configuration }} /p:Platform=x64 INSTALL.vcxproj
       
     - name: Activate developer CLI
-      uses: ilammy/msvc-dev-cmd@master
+      uses: ilammy/msvc-dev-cmd@v1
 
     - name: Tests
       run: cd tests && python test.py --application_folder_path ${{ github.workspace }}/build/make_install --shell_script_name windows_default_build.bat
@@ -69,5 +66,4 @@ jobs:
             export REPOSITORY=$(pwd)
             mkdir build && cd build && cmake -DCMAKE_CXX_COMPILER=${{ matrix.compiler }} .. && make && make install
             cd ${REPOSITORY}
-            chmod +x build/make_install/linux_default_build.sh
             cd tests && python3 test.py --application_folder_path ${REPOSITORY}/build/make_install --shell_script_name linux_default_build.sh

@@ -28,8 +28,17 @@ class Tests(unittest.TestCase):
         self.assertEqual(size_ptr.contents.value, 217204)
 
 
-def get_extension():
+def get_extension() -> str:
     return ".dll" if os.name == "nt" else ".so"
+
+
+def run_shell_script() -> str:
+    result = "\"args.shell_script_name\""
+
+    if os.name == "posix":
+        result = "source " + result
+
+    return result
 
 
 if __name__ == '__main__':
@@ -47,7 +56,7 @@ if __name__ == '__main__':
     application_folder_path = args.application_folder_path
     shared_library_name = f"default{get_extension()}"
 
-    os.system(f"cd \"{application_folder_path}\" && \"{args.shell_script_name}\"")
+    os.system(f"cd \"{application_folder_path}\" && {run_shell_script()}")
 
     os.replace(f"{application_folder_path}/{shared_library_name}", f"{os.curdir}/{shared_library_name}")
 
