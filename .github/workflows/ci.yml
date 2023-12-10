@@ -7,18 +7,33 @@ on:
 jobs:
   linux-build:
     runs-on: ${{ matrix.os }}
-
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-latest, ubuntu-18.04]
         configuration: [Debug, Release]
-        compilers: [gcc, clang]
+        compiler: [gcc, clang]
 
     steps:
     - uses: actions/checkout@v3
   
     - name: Build
-      run: mkdir build && cd build && cmake .. && make
+      run: export cc=${{ matrix.compiler }} && mkdir build && cd build && cmake .. && make
 
+  windows-build:
+    runs-on: windows-latest
+
+    strategy:
+      matrix:
+        configuration: [Debug, Release]
+
+    steps:
+    - uses: actions/checkout@v3
+  
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@main
+  
+    - name: Build
+      run: mkdir build && cd build && cmake .. && msbuild /p:Configuration=${{ matrix.configuration }} /p:Platform=x64
+    
     - name: Folder
-      run: cd build && ls
+      run: cd build && dir
