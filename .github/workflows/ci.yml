@@ -56,6 +56,13 @@ jobs:
     - name: Tests
       run: cd tests && python test.py --application_folder_path ${{ github.workspace }}/build/make_install --shell_script_name windows_default_build.bat
 
+    - name: Remove intermediates
+      run: |
+          cd build && cd make_install
+          rm *.exp
+          rm *.lib
+          rm *.obj
+
     - name: Remove debug executable
       # if: ${{ env.CURRENT_BRANCH == 'master' && matrix.configuration == 'Debug' }}
       if: ${{ env.CURRENT_BRANCH == 'dev' && matrix.configuration == 'Debug' }}
@@ -102,7 +109,7 @@ jobs:
     - uses: LazyPanda07/extract-current-branch@master
   
     - name: Setup release version variable
-      run: echo "RESOURCE_BUILDER_VERSION=$($($($(Select-String -Path .\resource_builder_core\src\utils.cpp -Pattern resourceBuilderVersion) -split '( = )')[2].TrimEnd(';')).Trim('\"'))" >> $Env:GITHUB_ENV
+      run: echo "RESOURCE_BUILDER_VERSION=$($($($(Select-String -Path .\resource_builder_core\src\utils.cpp -Pattern "resourceBuilderVersion = ") -split '( = )')[2].TrimEnd(';')).Trim('\"'))" >> $Env:GITHUB_ENV
       
     - name: Setup archive name variable
       run: echo "RESOURCE_BUILDER_ARCHIVE_NAME=ResourceBuilder_${{ env.RESOURCE_BUILDER_VERSION }}.zip" >> $Env:GITHUB_ENV
@@ -127,5 +134,6 @@ jobs:
       uses: svenstaro/upload-release-action@master
       with:
         tag: v${{ env.RESOURCE_BUILDER_VERSION }}
-        file: ${{ env.RESOURCE_BUILDER_ARCHIVE_NAME }}
+        file: ${{ github.workspace }}/*_${{ env.RESOURCE_BUILDER_ARCHIVE_NAME }}
+        file_glob: true
           
