@@ -53,7 +53,7 @@ jobs:
       uses: ilammy/msvc-dev-cmd@v1
 
     - name: Tests
-      run: cd tests && pyhon test.py --application_folder_path ${{ github.workspace }}/build/make_install --shell_script_name windows_default_build.bat
+      run: cd tests && python test.py --application_folder_path ${{ github.workspace }}/build/make_install --shell_script_name windows_default_build.bat
 
     - name: Remove debug executable
       if: ${{ env.CURRENT_BRANCH == 'master' }} && ${{ matrix.configuration == 'Debug' }}
@@ -112,14 +112,19 @@ jobs:
     - name: Folder
       run: ls
 
-    - name: Create zip
+    - name: Create Windows zip
       if: ${{ env.CURRENT_BRANCH == 'master' }}
-      run: Compress-Archive -Path @("Windows_Debug", "Windows_Release", "Release") -DestinationPath ${{ env.RESOURCE_BUILDER_ARCHIVE_NAME }}
+      run: Compress-Archive -Path @("Windows_Debug", "Windows_Release") -DestinationPath Windows_${{ env.RESOURCE_BUILDER_ARCHIVE_NAME }}
+
+    - name: Create Linux zip
+      if: ${{ env.CURRENT_BRANCH == 'master' }}
+      run: Compress-Archive -Path @("linux") -DestinationPath Linux_${{ env.RESOURCE_BUILDER_ARCHIVE_NAME }}
 
     - name: Publish
       if: ${{ env.CURRENT_BRANCH == 'master' }}
       uses: svenstaro/upload-release-action@master
       with:
         tag: v${{ env.RESOURCE_BUILDER_VERSION }}
-        file: ${{ env.RESOURCE_BUILDER_ARCHIVE_NAME }}
+        file: *_${{ env.RESOURCE_BUILDER_ARCHIVE_NAME }}
+        file_glob: true
           

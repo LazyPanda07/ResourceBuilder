@@ -1,3 +1,3 @@
 @echo off
 
-resource_builder.exe cl default.dll --keep default.jpg
+resource_builder.exe cl default.dll default.jpg

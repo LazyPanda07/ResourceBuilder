@@ -2,4 +2,4 @@
 
 set -e
 
-./resource_builder g++ default.so --keep default.jpg
+./resource_builder g++ default.so default.jpg
