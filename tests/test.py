@@ -57,7 +57,7 @@ if __name__ == '__main__':
     application_folder_path = args.application_folder_path
     shared_library_name = f"default{get_extension()}"
 
-    subprocess.run(run_shell_script(), cwd=application_folder_path)
+    error_code = os.system(f"cd {application_folder_path} && {run_shell_script()}")
 
     os.replace(f"{application_folder_path}/{shared_library_name}", f"{os.curdir}/{shared_library_name}")
 
