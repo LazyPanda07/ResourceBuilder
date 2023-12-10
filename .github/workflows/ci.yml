@@ -1,37 +1,24 @@
-name: Build
+name: CI
 
 on:
   push:
     branches: [ "master", "dev" ]
 
 jobs:
-  build:
+  linux-build:
     runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
-        build_type: [Debug, Release]
-        c_compiler: [gcc, clang, cl]
-        include:
-          - os: windows-latest
-            c_compiler: cl
-            cpp_compiler: cl
-          - os: ubuntu-latest
-            c_compiler: gcc
-            cpp_compiler: g++
-          - os: ubuntu-latest
-            c_compiler: clang
-            cpp_compiler: clang++
-        exclude:
-          - os: windows-latest
-            c_compiler: gcc
-          - os: windows-latest
-            c_compiler: clang
-          - os: ubuntu-latest
-            c_compiler: cl
+        os: [ubuntu-latest]
+        configuration: [Debug, Release]
+        compilers: [gcc, clang]
 
     steps:
     - uses: actions/checkout@v3
+  
+    - name: Build
+      run: mkdir build && cd build && cmake .. && make
 
-    
+    - name: Folder
+      run: cd build && ls
