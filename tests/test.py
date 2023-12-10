@@ -34,7 +34,7 @@ def get_extension() -> str:
 
 
 def run_shell_script() -> str:
-    result = f"\"{args.shell_script_name}\""
+    result = args.shell_script_name
 
     if os.name == "posix":
         result = "source " + result
