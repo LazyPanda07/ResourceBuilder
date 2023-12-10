@@ -19,6 +19,9 @@ jobs:
     - name: Build
       run: mkdir build && cd build && cmake -DCMAKE_CXX_COMPILER=${{ matrix.compiler }} .. && make
 
+    - name: Folder
+      run: cd build && ls
+
   windows-build:
     runs-on: windows-latest
 
@@ -36,7 +39,7 @@ jobs:
       run: mkdir build && cd build && cmake .. && msbuild /p:Configuration=${{ matrix.configuration }} /p:Platform=x64 ALL_BUILD.vcxproj
     
     - name: Folder
-      run: cd build && cd x64 && cd ${{ matrix.configuration }} && dir
+      run: cd build && cd resource_builder && cd ${{ matrix.configuration }} && dir
 
   linux-docker-build:
     runs-on: ubuntu-latest
@@ -49,4 +52,4 @@ jobs:
       run: sudo docker pull ubuntu:18.04
 
     - name: Run docker
-      run: docker run --rm -it ubuntu:18.04
+      run: docker run --rm -i ubuntu:18.04 bash
