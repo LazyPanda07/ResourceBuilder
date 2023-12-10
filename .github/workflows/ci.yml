@@ -2,14 +2,13 @@ name: CI
 
 on:
   push:
-    branches: [ "master", "dev" ]
+    branches: [master, dev]
 
 jobs:
   linux:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [ubuntu-latest]
         configuration: [Debug, Release]
         compiler: [g++, clang++]
 
@@ -19,8 +18,8 @@ jobs:
     - name: Build
       run: mkdir build && cd build && cmake -DCMAKE_CXX_COMPILER=${{ matrix.compiler }} .. && make && make install
       
-    - name: Folder
-      run: cd build/make_install && ls -a
+    - name: Change linux_default_build.sh script mode
+      run: chmod +x build/make_install/linux_default_build.sh
 
     - name: Tests
       run: cd tests && python3 test.py --application_folder_path ${{ github.workspace }}/build/make_install --shell_script_name linux_default_build.sh
@@ -50,13 +49,25 @@ jobs:
 
   linux-docker:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        configuration: [Debug, Release]
+        compiler: [g++, clang++]
 
     steps:
+    - uses: LazyPanda07/extract-current-branch@master
+
     - name: Docker
       uses: addnab/docker-run-action@v3
       with:
         image: ubuntu:18.04
         run: |
             apt update
-            apt install gcc -y
-            gcc --version
+            apt install gcc clang cmake git python3 -y
+            git clone https://github.com/LazyPanda07/ResourceBuilder.git -b ${{ env.CURRENT_BRANCH }}
+            cd ResourceBuilder
+            export REPOSITORY=$(pwd)
+            mkdir build && cd build && cmake -DCMAKE_CXX_COMPILER=${{ matrix.compiler }} .. && make && make install
+            cd ${REPOSITORY}
+            chmod +x build/make_install/linux_default_build.sh
+            cd tests && python3 test.py --application_folder_path ${REPOSITORY}/build/make_install --shell_script_name linux_default_build.sh
