@@ -1,5 +1,6 @@
 import argparse
 import os
+import subprocess
 import sys
 import unittest
 
@@ -33,7 +34,7 @@ def get_extension() -> str:
 
 
 def run_shell_script() -> str:
-    result = "\"args.shell_script_name\""
+    result = f"\"{args.shell_script_name}\""
 
     if os.name == "posix":
         result = "source " + result
@@ -56,7 +57,7 @@ if __name__ == '__main__':
     application_folder_path = args.application_folder_path
     shared_library_name = f"default{get_extension()}"
 
-    os.system(f"cd \"{application_folder_path}\" && {run_shell_script()}")
+    subprocess.run(run_shell_script(), cwd=application_folder_path)
 
     os.replace(f"{application_folder_path}/{shared_library_name}", f"{os.curdir}/{shared_library_name}")
 
