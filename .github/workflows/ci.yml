@@ -19,11 +19,12 @@ jobs:
     - name: Build
       run: mkdir build && cd build && cmake -DCMAKE_CXX_COMPILER=${{ matrix.compiler }} .. && make && make install
       
+    - name: Folder
+      run: cd build/make_install && ls -a
+
     - name: Tests
       run: cd tests && python3 test.py --application_folder_path ${{ github.workspace }}/build/make_install --shell_script_name linux_default_build.sh
 
-    - name: Folder
-      run: cd build/make_install && ls -a
 
   windows:
     runs-on: windows-latest
@@ -41,6 +42,9 @@ jobs:
     - name: Build
       run: mkdir build && cd build && cmake .. && msbuild /p:Configuration=${{ matrix.configuration }} /p:Platform=x64 INSTALL.vcxproj
       
+    - name: Activate developer CLI
+      uses: ilammy/msvc-dev-cmd@master
+
     - name: Tests
       run: cd tests && python test.py --application_folder_path ${{ github.workspace }}/build/make_install --shell_script_name windows_default_build.bat
 
@@ -48,13 +52,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Install docker
-      run: sudo apt install docker -y
-
-    - name: Pull Ubuntu 18.04
-      run: sudo docker pull ubuntu:18.04
-
     - name: Docker
-      run: |
-          docker run --name Ubuntu-18.04 --rm -i ubuntu:18.04 /bin/bash &&
-          docker exec -d Ubuntu-18.04 apt update && apt install gcc && gcc --version
+      uses: addnab/docker-run-action@v3
+      with:
+        image: ubuntu:18.04
+        run: |
+            apt update
+            apt install gcc -y
+            gcc --version
