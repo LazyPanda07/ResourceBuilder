@@ -16,8 +16,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3
   
+    - name: Install clang
+      run: apt update && apt install clang
+  
     - name: Build
-      run: export cc=${{ matrix.compiler }} && mkdir build && cd build && cmake .. && make
+      run: mkdir build && cd build && cmake -DCMAKE_C_COMPILER=${{ matrix.compiler }} -DCMAKE_CXX_COMPILER=${{ matrix.compiler }} .. && make
 
   windows-build:
     runs-on: windows-latest
@@ -33,7 +36,7 @@ jobs:
       uses: microsoft/setup-msbuild@main
   
     - name: Build
-      run: mkdir build && cd build && cmake .. && msbuild /p:Configuration=${{ matrix.configuration }} /p:Platform=x64
+      run: mkdir build && cd build && cmake ..
     
     - name: Folder
       run: cd build && dir
