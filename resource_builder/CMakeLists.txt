@@ -14,14 +14,16 @@ add_executable(${PROJECT_NAME} "main.cpp")
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/resource_builder_core/include)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE resource_builder_core -static)
-
 if (WIN32)
     add_definitions(-DWINDOWS)
+
+    target_link_libraries(${PROJECT_NAME} PRIVATE resource_builder_core)
 
     set(SHELL_SCRIPT ${CMAKE_SOURCE_DIR}/scripts/windows_default_build.bat)
 elseif(UNIX)
     add_definitions(-DLINUX)
+
+    target_link_libraries(${PROJECT_NAME} PRIVATE resource_builder_core -static)
 
     set(SHELL_SCRIPT ${CMAKE_SOURCE_DIR}/scripts/linux_default_build.sh)
 endif()

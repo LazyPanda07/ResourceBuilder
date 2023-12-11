@@ -23,6 +23,8 @@ if (WIN32)
     add_definitions(-DWINDOWS)
 elseif(UNIX)
     add_definitions(-DLINUX)
+
+    target_link_libraries(${PROJECT_NAME} PRIVATE -static)
 endif()
 
 install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
