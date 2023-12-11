@@ -118,7 +118,7 @@ jobs:
       run: echo "RESOURCE_BUILDER_VERSION=$($($($(Select-String -Path .\resource_builder_core\src\utils.cpp -Pattern "resourceBuilderVersion = ") -split '( = )')[2].TrimEnd(';')).Trim('\"'))" >> $Env:GITHUB_ENV
       
     - name: Setup archive name variable
-      run: echo "RESOURCE_BUILDER_ARCHIVE_NAME=${{ matrix.artifact }}_ResourceBuilder_${{ env.RESOURCE_BUILDER_VERSION }}.zip" >> $Env:GITHUB_ENV
+      run: echo "RESOURCE_BUILDER_ARCHIVE_NAME=${{ matrix.artifact }}_${{ env.RESOURCE_BUILDER_VERSION }}.zip" >> $Env:GITHUB_ENV
 
     - name: Download artifact
       if: ${{ env.CURRENT_BRANCH == 'master' }}
