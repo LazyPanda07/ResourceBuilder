@@ -24,7 +24,7 @@ namespace resource_builder
     {
         std::string getResourceBuilderVersion()
         {
-            std::string resourceBuilderVersion = "0.1.0";
+            std::string resourceBuilderVersion = "0.1.1";
 
             return resourceBuilderVersion;
         }
