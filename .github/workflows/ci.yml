@@ -103,6 +103,7 @@ jobs:
 
   publish:
     runs-on: windows-latest
+    permissions: write-all
     needs: [linux, windows, linux-docker]
     strategy:
       matrix:
